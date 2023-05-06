@@ -290,3 +290,101 @@ The goal of a data scientist is to fit a model with low bias and low variance.
 - *bias* is the difference between the average prediction of the model and the correct values that we are trying to predict.A model with high bias misses the important relationships between the predictor variables and the target. This is an example of underfitting. 
 - *variance* is the variablity of model prediction for a given data point. A model with high variance models the random noise in the data. This is an example of overfitting.
 The Bias-Variance tradeoff is where the data scientists choose a model that accurately depicts the relationships in the data, but also chooses a model that generalizes well to new data.
+
+
+# CHAPTER 3: SUPERVISED MODELS - Statistical Approach
+Supervised refers to observations where the target is known
+based on the known events, a model is trained to capture the relationship between inputs and target
+
+## Classification and Estimation
+Classification and estimation are commmon tyoes of predictive models. 
+Classification assumes that the target is a class variable. The target can be a binary class, 0 or 1, yes or no, or it can be a multinomial class 1,2,3,4,5 or low, medium, high. eg(is this business event a fradulent transaction(yes or no)?)
+Estimation assumes that the target is a continous number. The taret can take any value in the range of negative infinity to positive infinity.
+
+Both predictive models require the following:
+- Observations/Cases/Instances: a real case comprising of attributes that describe the observation
+- Inputs/attributes/variables: the measure of the observation or its attributes. It can be demographic information about the customer such as name, salary, age and marital status.
+- Target/class/label: a tag or label for each observation. eg default or no default.
+
+Statistical models map the set of input variables to the target. The model tries to create a concise representation of the inputs and the target.
+An example: our input is: charachteristics of a customer such as age, gender, how long they have been in the DB, marital status...etc. our target is purchasing company product. By going through past event of how the target has related with the product we get to know the type of person based on their charachteristics who is likely to buy this product. From this the company will target perople with these specific charachteristics to purchase the product. of course, some targeted customers will eventually not purchase the product and some customers not targeted will purchase the product. This is the *intrinsic error* associated with the model. Customers with similar charachteristics behave very differently. Errors are associated with all models.
+
+All supervised models behave similarly, using the past known events to estimate the relationships between predictor variables and the target. If a good model is found the model can be used to predict future events.
+
+Because the purpose of the supervised model is to predict the unknown values of the target, the main goal of the supervised model is to generalize to new data or future cases. **Generalization** means the ability to predict the outcome on new cases when the target is unknown. That is the reason we use different data sets to train the model(capture the relationships between the inputs and the target) and validate the model(generalize the model to make good predictions on the new data).
+
+Generalization is involved in model assessment. The model is fit to the training data set, and the performance is evaluated on the validation data set by comparing the predicted values to the observed values of the target. Since the target value is known, the assessment is straightforward, comparing the values the model predicts for the target and the values observed for the target.
+
+This chapter discusses 3 distinct types of models:
+- Linear Regression: used to predict continous targets. one assumption of the linear regression model is that there is a linear relationship between the input and the target
+- Logistic Regression: used to predict discrete targets such as binary, ordinal and nominal outcomes. one assumption of the logistics regression is that there is linear relaationships between the inputs and the logits.
+- Decision tree: used to predict both continous and categorical targets. There is no assumption for the relationship between input and target. Decision trees are universal approximators because theoritically they can capture any type of relatioship between inputs and targets.
+
+## Linear Regression
+The relationship between the target and the input variables can be charachterized by the equation: y1=Bo + B1X1 + E1, i = 1...,n
+where: 
+- y1: is the target variable, 
+- X1: is the input variable, 
+- Bo: is the intercept parameter, which corresponds to the value of the target variable whe the predictor is 0.
+- B1: is the estimate(slope) parameter, which corresponds to the magnitude of the change in the target variable given a one-unit change in the input variable.
+- E1: is the error term representing devistions of y1 about Bo+B1X1
+
+Estimates of the unknown parameters Bo and B1 are obtained interactively by the method of ordinary least squares. This method provides the estimates by determining the line that minimizes the sum of the squared vertical distances between the observations and the fitted line. in other words, the fitted or regression line is as close as possible to all the data points.
+
+The estimation for the target variable is formed from simple linear combination of the inputs. The prediction estimates can be viewed as a linear approximation to the expected value of a target conditioned on the observed input values.
+Lineear regression is quite simple to implement since it is only a linear equation. The coefficients from the model are easily interpretable as the effect on the target given a one-unit increase in the predictor variable controlling for the other predictor variables. In most cases, the results of the model can be obtained quickly, and new observations can be scored quickly. Predictions on new cases can be easily obtained by plugging in the new values of the predictor variables.
+
+The *drawback* of linear regression are:
+- the models are limited to normally distributed residuals, which are the observed values minus the predictor values. If the residuals show a non-normal distribution such as skewed distribution, then a generalized linear regression model might be helpful.
+- High degree of collinearity among the predictors can cause model instability. The instability of the coefficients might not lead to a simple model that identifies the predictor variables that are the best predictors of the target. Therefore, Data scientists should reduce redundacy first before using linear regression models.
+If there are non-linear relationships between the predictor variables and the target, data scientists will have to add higher order terms to properly model these relationships or perform variable trasformations. Finding the appropriate higher order term or variable transformation can be time-consuming and cumbersome.
+
+Linear regression models can be affected by outliers that can chage the model results and lead to poor predictive performance.
+
+## Logistic Regression
+Closely related to linear regression. In Logistic regression, the expected value of the target is transformed by a link function to restrict its values to the unit interval. In this way, model oredictions can be viewed as primary outcome probabilities between 0 and 1. A linear combination of the inputs generates a logit score, or the log of the odds of the primary outcome, in contast to linear regression which estimates the value of the target.
+The range of logit scores is from negative infinity to positive infinity.
+For binary predictions, any monotonic function that maps the unit intervals to the real number line can be considered as a link. The logit link function is one of the most common. Its popularity is due, in part, to the interpretability of the model.
+The continous logit scores/logit of *P*, is given by: log of the odds(log of the probability of the event), divided by, the probability of non-event. This logit transformation transforms the probability scale to the real line of negative infinity to positive infinity. Therefore, the logit can be modeled with a linea combinantion since linear combination can take on any value.
+
+The Logistic model is particularly easy to interpret because each predictor variable affects the logit linearly. The coefficients are the slopes. Exponentiating each parameter estimate gives the odds ratios, which compares the odds of the event in one group to the odds of the event in another group.
+
+The predictions from logistic regression can be rankings, decisions or estimates. Analysts can rank the posterior probabilities to assess observations to decide what action to take.
+The parameter estimates in a logistic regression are commonly obtained by the method of maximum likelihood estimation. These estimates can be used in the logit and logistic equation to obtain predictions.
+If the target variable is in 2 categories, the appropriate logistic model is *binary logistic regression*
+If there are more than 2 categories within the target variable:
+- If the target variable is nominal, the appropriate model is nominal logistic regression
+- If the target variable is ordinal(ranking), the appropriate model is ordinal logistic regression.
+The binary logistic regression model assumes that the logit of the posterior probability is a linear combination of the predictor variable.
+
+Strengths of Logistic regression model are:
+- The model is simple to implement since its only a linear equation
+- The coefficients from the model are easily interpretable as the effect on the logit gives a one-unit increase in the predictor variable controllong for the other predictor variables.
+- The results of the model can be obtained quickly.
+- new observations can be scored quickly.
+
+Drawbacks of Logistic regression model are similar to linear regression drawbacks.
+
+## Decision Tree
+Decision trees are statistical models designed for supervised prediction problems. Supervised prediction encompasses predictive modeling, pattern recognition, discriminant analysis, multivariate function estimation, and supervised machine learning. A decision tree includes the following components:
+- an internal node is a test on an attribute
+- a branch represents an outcome of the test, such as color=purple.
+-  a leaf node represents a class label or class label distribution.
+- at each node, one attribute is chosen to split the training data into distinct classes as much as possible.
+- a new instance is classified by following a matching path to a leaf node.
+
+The model can be represented in a tree-like structure.
+A decision tree is read from top down starting from the root node. Each internal node represents a split based on the values of one of the inputs The inputs can appear in any number of splits throughout the tree. Cases move down the branch that contains its input value.
+In a binary tree with interval inputs, each internal node is a simple inequality. A case moves left if the inequality is true and right otherwise. The terminal nodes of the tree are called leaves, they represent the predicted target. All cases reaching a leaf are given the same predicted value. The leaves give the predicted class as well as the probability of class membership.
+Decision trees can have multi-way splits where the values of the inputs are partitioned into ranges.
+
+When the target is categorical, the model is called a classification tree. **A classification tree** defines several multivariate step functions. Each function corresponds to the posterior probability of a target class. when the target is continous the model is called a **regression tree**
+Cases are scored using prediction rules, these rules define the regions of the input space purer with regard to the target response value.
+
+The strengths of decision trees are that they are easy to implement and they are very intuitive. The results of the model are easy to explain to non-technical personnel. Decision trees can be fit very quickly and can score new customers very easily. It can handle non-linear relationships between target and the predictor variables without specifying the relationship in the model unlike logistic and linear regression.
+Missing values are handled because they are part of the prediction rules.
+Decision trees are also robust to outliers in the predictor variable values and can discover interactions. An interaction occurs when the relationship between the target and the predictor variable changes by the level of another predictor variable e.g if the relationship between the target and income us different for males compared to females, decision trees would discover it.
+
+Decision trees confront the curse of dimensionality by ignoring irrelevant predictor variables. however they have no built-in method for ignoring redundant predictors. This can be a problem in deployment in that decision trees might arbitrarily select from a set of correlated predictor variables. It is recommended that data scientists reduce redundancy before fitting the decision tree.
+
+A drawback: Decision trees are very unstable models, any minor changes in the training data set can cause substantial changes in the structure of the tree. The overall performance, or accuracy, can remain the same but the structure can be quite different. The common method to mitigate the problem of instability is to create an ensemble of trees.
