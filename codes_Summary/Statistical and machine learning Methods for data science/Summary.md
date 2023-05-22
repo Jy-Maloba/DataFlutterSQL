@@ -451,4 +451,65 @@ Complex optimization algorithms are a critical part of neural network modeling. 
 - Lasso or L1 - penalizes the absolute value of the weight.
 - Ridge or L2 - penalizes the square of the weight
 Another important parameter is learning rate, which controls how quickly training occurs by updating the set of weights in each iteration.
-Neural networks take a lot of time when fitting and training the model especially as the number of hidden units and layers increase. They sometimes do not perform as well as simpler models such as linear regression. This situation occurs when the signal to noise ratio is low. When there is a strong pattern(signal) relative to the variation(noise) the signal to noise ratio is high. In this situation, neural networks outperform simpler models
+Neural networks take a lot of time when fitting and training the model especially as the number of hidden units and layers increase. They sometimes do not perform as well as simpler models such as linear regression. This situation occurs when the signal to noise ratio is low. When there is a strong pattern(signal) relative to the variation(noise) the signal to noise ratio is high. In this situation, neural networks outperform simpler models.
+
+# CHAPTER 5: ADVANCED TOPICS IN SUPERVISED MODELS
+# Advance Machine Learning Models and Methods
+This chapter covers 2 advanced machine learning models and 2 advanced methods to train supervised models. 
+The machine learning models are:
+- **Support vector machine** This model is implemented SAS (statistical analysis system) can currently handle binary and continuous targets.
+- **Faxtorization machine** This model is an extension of the linear model and it can handle continuous targets.
+The advance methods are:
+- **Ensemble models** This model combines several models to predict the target value. The taget can be continuous or discrete.
+- **Two-Stage Models** This model allows the modeling of a discrete and continuous target. The model first predicts the binary response and if the prediction is 1, then the model predicts the continous response.
+
+## Support Vector Machines
+SVM is a robust model used to classify categorical or continous targets. Like neural networks, these models tend to be black boxes, but they are very flexible. SVM automatically discover any relationship between the input and the target. Data scientists do not need to specify the functional form, or the relationship between the inputs and the target before fitting the model.
+SVM makes decision predictions instead of ranks or estimates. In that way, it seperates the outcome of a binary target into 2 classes. It can be used for regression tasks as well. There are many classification rules/regression lines that can be used to seperate the 2 classes, if the data is linearly seperable, there are limitless number of solutions/lines to seperate the 2 classes or any case of binary target. 
+Given 2 input variables( within x and y axis(2D)) the SVM  is a **line** (y=mx+c). 
+Given 3 input variables (x y and z axis (3D)) the support vector is a **plane**.
+With more than 3 variables, the support vector is a **hyperplane**
+For mathematical convenience, the binary target is defined by +1 and -1, rather than the usual 1 and 0 because the linear seperator equals 0, classification is determined by a point falling on the positive or negative side of the line.
+
+SVM gets more complicated when the problem is not linearly seperable.
+H={<w,x> +b=0}
+where w is the mechanism that affects the slope of H(the optimal line that correctly classifies the observation).
+The bias parameter b is the measure of offset of the seperating line from the origin, or the plane in 3D or hyperplane in higher dimension.
+The quantity <w,x> is the dot product between the vectors w and x. A **dot product** is a way to multiply vectors that result in a scalar, or a singular number, as the answer. It is an element-by-element multiplication and then a sum across the products. SVM selects values for w and b that define the iptimal line that correctly classifies the cases.
+
+How are values w and b chosen? SVM try to find the decision boundary that maximixes the margin. Margins are the parpendicular distance between the line H and the carrying vectors. The SVM is trying to find the hyperplane that maximizes the margin with the condition that both classes are correctly classified. The properties of the hyperplane that maximizes the margin are described by the support vector also called carrying vectors. These are the points closest to the hyperplane and they determine the location of the hyperplane (H). Because the hyperplane depends only on data points and not predictor variables, the curse of dimensionality is minimized.
+
+In most realistic scenarios, not oly are the data not linearly seperable, but a classifier defined by the hyperplane would make too many mistakes to be a viable solution. In that case, one solution would be to apply a polynomial transformation so that the input data would be projected into higher dimensions and then find the maximum margin hyperplane in this higher dimensions. It might be the case that it's not possible to find a hyperplane to linearly seperate the the classes considering a particular input data, but we could find a hyperplane in a higher dimesion that splits the input data when it is set in a higher dimensionality.
+The dot product to transform the support vector in a higher dimensionality, such as polynomials, can be extremely computationally intensive. to mitigate this, the algorithm to calculate the support vectors uses a kernel function, such as a polynomial kernel of degree 2 or 3, to compute the dot product of the 2 products that is much less computationaly intensive. This is known as a **kernel trick**
+ One of the strengths of SVM is that data scientists do not need to specify the functional form or know the type of relationship between inputs and targets. 
+ SVM  are robust to outliers in the input space. They sre effective classifiers when the data points are seperable in the input space.
+ SVM are less affected by the curse of dimensionality because it is less affected by the number of predictor variables compared to other models. The hyperplane only depends on data points and not predictor variables.
+
+One of the weaknesses of SVM is that the model itself is a black box with no interpretable parameters estimates or rules and thresholds. SVM work very similarly to neural networks and tree-based ensemble models like random-forest and gradient boosting when the subject id interpreting results. In regulated markets where the relationships between the predictor variables and the target are important to understand the outcome, and mostly to explain the results, SVM would have limited usefulness. In neural networks models, a surrogate model such as a regression or a decision tree, can be used to explain the outcomes from a SVM. However, by using a surrogate model the data scientist are not explaining the models but instead they are interpreting the results in terms of the business actions. Some regulators may not accept this approach.
+
+
+## Factorization Machines
+There is a class of business applications that involves estimating how users would rate some items. Very often companies do not have much information about the users and items. The main goal in this model is to evaluate the relationship between users and items.
+Factorization machines is a powerful tool for modeling high fimensional and sparse data. A sparse matrix is the matrix of users and items. The main goal of factorization machines is to predict the missing entries in the matrix.
+FM are used in recommender systems where the aim is to predict user ratings on items. There are 2 major types of recommender systems: One type relies on the on the **content filtering** method. Content filtering assumes that a set of information about the items is available for the model estimation. This set of information is often refferef to as side informtion, and it describes the items that will be recommended. By having side information available, the content filtering has no problem in estimating the rating for a new item.
+The second type is based on **collaborative filtering**. This method does not require additional information about he items. The information needed is the matrix containing the set of users, set of items and the ratings of users to items. The combination of all users and items create a large, sparse matrix containing lots of missing ratings. The collaborative method works well in  estimating ratings for all combinations of users and items, The problem with it, is the inability to estimte added items that have no rating.
+
+**Factorization machines** estimate the ratings by summing up the average rating over all users and items, the average rating given by a user, the average rating given to an item, and a pairwise interaction term that acounts for the affinity between a user and an item. This affinity is modeld as the inner product between 2 vectors of features: one for the user and another for the item. These features are collectively known as factors.
+Matrix factorization techniques are effective because they enable data scientists to discover the latent features underlying the interactions between users and items. The basic idea is to discover 22 or more matrices that when multiplies, they return the original matrix.
+
+
+## Ensemble Models
+create new models by combining the predictions from multiple models consisting of different modelling techniques or different modelling structures. The combined model is the used to score data. For binary target, data scientists can take the mean of the posterior probabilities as the final predicted probability. Another approach is to derive a decision and see how many models predict a 1 versus a 0, then tke a plurality vote of the predicted class. For continous target, ususal approach is to make the final estimation as the mean of the estimations for each model in the ensemble structure.
+The common advantagwe of ensemble models is tha the combined model is usually better than the individual models that compose it. Better in terms of generalization because the final model accounts for relationships discovered from distict models. The combination of these models can better account for variablity of future data. It is also better in terms of accuracy. The overall estimation  can present less errors than individual models. Dat scientists should always compare the model performance of the ensemble and individual models and evaluate when to deploy which model among the 2.
+Ensemble models have low bias and low vvariance and are more robust to overfitting.
+The ensemble model can generalize better to future data and is be more accurate.
+
+Ensemble models lack intepretable parameter estimates. Therefore if understanding the relationship between the input and target is a priority then the model is not useful. The model might also be slow since many models are in production.
+If the relationship between input and trget are captured by a single model, ensemble approach offers no benefit
+Ensemble models are more computationally expensive since several models are being fitted and the results are averaged.
+The model cannot be interpreted.
+
+## Two-Stage Models
+This model enables an data scientists to model a class target and the use the predicted probability, or the decision , to split the observations and feed them into another model, normally to train a model with a continous target. The 2 models can use different algorithms and predictor variables. Therefore, the first model classifies a binary target. Based on the decision of the first model(0 or 1), another model is trained to estimate a continous value.  example: model the probability of unmanageable debt, and if the predicted class is 1, then model the amount of unmanageable debt.
+If predicted probability is accurately estimated in the first stage, then there might be an increase in the accuracy of the predicted amounts in the second stage.
+Data scienists need to correctly specify models in either stage because this impacts the accuracy of the predictions and therefore the estimations. The 2 stages also need to be correlated.
